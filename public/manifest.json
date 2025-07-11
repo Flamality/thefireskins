@@ -13,6 +13,11 @@
       "sizes": "192x192"
     },
     {
+      "src": "fireskins.png",
+      "type": "image/png",
+      "sizes": "1024x1024"
+    },
+    {
       "src": "logo512.png",
       "type": "image/png",
       "sizes": "512x512"
