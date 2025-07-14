@@ -1,18 +1,18 @@
-import { useEffect, useRef, useState } from "react";
-import "./App.css";
-import { SkinViewer } from "skinview3d";
-import { BiDownload, BiSave } from "react-icons/bi";
-import fireskins from "./images/fireskins.png";
-import { SiCashapp } from "react-icons/si";
-import { BsSave, BsSave2, BsSaveFill } from "react-icons/bs";
-import { FaDownload, FaSave, FaTrash } from "react-icons/fa";
+import { useEffect, useRef, useState } from 'react';
+import './App.css';
+import { SkinViewer } from 'skinview3d';
+import { BiDownload, BiSave } from 'react-icons/bi';
+import fireskins from './images/fireskins.png';
+import { SiCashapp, SiPaypal } from 'react-icons/si';
+import { BsSave, BsSave2, BsSaveFill } from 'react-icons/bs';
+import { FaDownload, FaSave, FaTrash } from 'react-icons/fa';
 
 function App() {
-  const [username, setUsername] = useState("");
-  const [current, setCurrent] = useState("steve");
-  const [status, setStatus] = useState("No skin loaded yet.");
-  const [statusType, setStatusType] = useState("neutral");
-  const [saves, setSaves] = useState(["flamality", "TheFireGODX"]);
+  const [username, setUsername] = useState('');
+  const [current, setCurrent] = useState('steve');
+  const [status, setStatus] = useState('No skin loaded yet.');
+  const [statusType, setStatusType] = useState('neutral');
+  const [saves, setSaves] = useState(['flamality', 'TheFireGODX']);
   const viewerRef = useRef(null);
   const viewerInstance = useRef(null);
 
@@ -20,17 +20,17 @@ function App() {
     const regex = /^[a-zA-Z0-9_]+$/;
     let trimmed = username.trim();
     console.log(typeof s);
-    if (typeof s == "string") {
+    if (typeof s == 'string') {
       trimmed = s;
     }
-    if (trimmed === "" || !regex.test(trimmed)) {
-      setStatus("Invalid username!");
-      setStatusType("error");
+    if (trimmed === '' || !regex.test(trimmed)) {
+      setStatus('Invalid username!');
+      setStatusType('error');
       return;
     }
 
     setStatus(`Loading ${trimmed}...`);
-    setStatusType("loading");
+    setStatusType('loading');
 
     const minTime = new Promise((resolve) => setTimeout(resolve, 600));
     const skinUrl = `https://minotar.net/skin/${trimmed}`;
@@ -72,24 +72,24 @@ function App() {
     }
 
     setStatus(`Showing ${trimmed}'s skin!`);
-    setStatusType("success");
+    setStatusType('success');
   };
 
   const download = async () => {
     if (!current) {
-      setStatus("Nothing to download!");
-      setStatusType("error");
+      setStatus('Nothing to download!');
+      setStatusType('error');
       return;
     }
 
     try {
-      setStatusType("loading");
-      setStatus("Downloading skin...");
+      setStatusType('loading');
+      setStatus('Downloading skin...');
       const response = await fetch(`https://minotar.net/skin/${current}`);
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
 
-      const link = document.createElement("a");
+      const link = document.createElement('a');
       link.href = url;
       link.download = `${current}_skin.png`;
       document.body.appendChild(link);
@@ -97,26 +97,26 @@ function App() {
       document.body.removeChild(link);
 
       window.URL.revokeObjectURL(url);
-      setStatus("Download complete!");
-      setStatusType("success");
+      setStatus('Download complete!');
+      setStatusType('success');
     } catch (err) {
-      console.error("Download failed:", err);
-      setStatus("Download failed!");
-      setStatusType("error");
+      console.error('Download failed:', err);
+      setStatus('Download failed!');
+      setStatusType('error');
     }
   };
 
   const save = () => {
-    if (!current || current === "steve") return;
+    if (!current || current === 'steve') return;
     let updated = [...saves];
     if (!updated.includes(current)) updated.splice(0, 0, current);
     setSaves(updated);
-    localStorage.setItem("savedSkins", JSON.stringify(updated));
+    localStorage.setItem('savedSkins', JSON.stringify(updated));
   };
   const removeSave = (s) => {
     let updated = saves.filter((skin) => skin !== s);
     setSaves(updated);
-    localStorage.setItem("savedSkins", JSON.stringify(updated));
+    localStorage.setItem('savedSkins', JSON.stringify(updated));
   };
   useEffect(() => {
     viewerInstance.current = new SkinViewer({
@@ -140,23 +140,23 @@ function App() {
   }, []);
 
   useEffect(() => {
-    const saved = JSON.parse(localStorage.getItem("savedSkins"));
+    const saved = JSON.parse(localStorage.getItem('savedSkins'));
     if (saved && Array.isArray(saved)) setSaves(saved);
   }, []);
 
   return (
-    <div className='App'>
-      <div className='top-banner'>
-        <img className='logo' src={fireskins} alt='fireskins logo' />
+    <div className="App">
+      <div className="top-banner">
+        <img className="logo" src={fireskins} alt="fireskins logo" />
       </div>
-      <div className='top'>
+      <div className="top">
         <input
-          type='text'
+          type="text"
           value={username}
-          placeholder='Enter Username'
+          placeholder="Enter Username"
           onChange={(e) => setUsername(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") {
+            if (e.key === 'Enter') {
               e.preventDefault();
               getSkin();
             }
@@ -167,13 +167,13 @@ function App() {
 
       <p className={`status ${statusType}`}>{status}</p>
 
-      <div className='middle'>
-        <div className='skin-viewer'>
+      <div className="middle">
+        <div className="skin-viewer">
           <canvas
             ref={viewerRef}
-            className={`${statusType == "loading" ? "canvas-hide" : ""}`}
+            className={`${statusType == 'loading' ? 'canvas-hide' : ''}`}
             style={
-              statusType == "loading"
+              statusType == 'loading'
                 ? {
                     height: 0,
                     width: 0,
@@ -186,43 +186,43 @@ function App() {
           ></canvas>
           <p
             className={`skin-name ${
-              statusType == "loading" ? "skin-name-hide" : ""
+              statusType == 'loading' ? 'skin-name-hide' : ''
             }`}
           >
-            {current || "steve"}
+            {current || 'steve'}
           </p>
         </div>
 
-        <div className='user-info'>
+        <div className="user-info">
           <div>
             <p>Username</p>
-            <p>{current || "N/A"}</p>
+            <p>{current || 'N/A'}</p>
           </div>
           <div>
             <p>Skin Link</p>
-            <p>{current ? `https://thefire.skin/u/${current}` : "N/A"}</p>
+            <p>{current ? `https://thefire.skin/u/${current}` : 'N/A'}</p>
           </div>
         </div>
 
-        <div className='buttons'>
-          <button onClick={download} className='download-btn'>
+        <div className="buttons">
+          <button onClick={download} className="download-btn">
             <FaDownload /> Download Skin
           </button>
-          <button onClick={save} className='save-btn'>
+          <button onClick={save} className="save-btn">
             <FaSave />
           </button>
         </div>
       </div>
 
-      <div className='bottom'>
+      <div className="bottom">
         {saves.length > 0 && (
-          <div className='save-section'>
+          <div className="save-section">
             <p>My Saved Users</p>
-            <div className='saves-strip'>
+            <div className="saves-strip">
               {saves.map((s, i) => (
                 <div
                   key={i}
-                  className='save-item'
+                  className="save-item"
                   onClick={() => {
                     getSkin(s);
                   }}
@@ -230,7 +230,7 @@ function App() {
                   <p>{s}</p>
                   <img src={`https://minotar.net/body/${s}/100.png`} />
                   <button
-                    className='remove-save'
+                    className="remove-save"
                     onClick={() => {
                       removeSave(s);
                     }}
@@ -242,14 +242,20 @@ function App() {
             </div>
           </div>
         )}
-        <div className='support-banner'>
+        <div className="support-banner">
           <p>🔥 Support this project 🔥</p>
-          <a href='https://cash.app/$Smaranj' target='__blank'>
+          <a href="https://cash.app/$Smaranj" target="__blank">
             <SiCashapp /> Cashapp
           </a>
+          <a
+            href="hhttps://paypal.me/SmaranJanpati?country.x=US&locale.x=en_US"
+            target="__blank"
+          >
+            <SiPaypal /> Paypal
+          </a>
         </div>
-        <div className='footer-badge'>
-          <a href='https://flamality.com' target='_blank' rel='noreferrer'>
+        <div className="footer-badge">
+          <a href="https://flamality.com" target="_blank" rel="noreferrer">
             Made by Flamality
           </a>
         </div>
